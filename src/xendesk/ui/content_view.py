@@ -14,24 +14,16 @@ from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 class ContentView(QWidget):
     def __init__(self):
         super().__init__()
-        self.setAutoFillBackground(True)    
-        self.main_font = self.set_font()
+        self.setAutoFillBackground(True)
 
         background_color = self.palette()
         background_color.setColor(QPalette.ColorRole.Window, QColor("green"))       # TODO THEME to custom later
         self.setPalette(background_color)
 
-    def set_font(self):
-        """
-        Customize the font here
-        """
-        font = QLabel().font()                                                      # TODO THEME font custom & import settings                                                                  
-        return font
-
 class ConfigView(ContentView):
     def __init__(self):
         super().__init__()
-        font = self.main_font
+        font = self.font()
         
         background_color = self.palette()
         background_color.setColor(QPalette.ColorRole.Window, QColor("dark purple"))       # TODO THEME to custom later
@@ -55,7 +47,7 @@ class WelcomeView(ContentView):
         background_color.setColor(QPalette.ColorRole.Window, QColor("dark blue"))       # TODO THEME to custom later
         self.setPalette(background_color)
 
-        font = self.main_font
+        font = self.font()
 
         self.setLayout(QVBoxLayout())
 
