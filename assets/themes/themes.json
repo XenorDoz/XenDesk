@@ -1,0 +1,20 @@
+{
+    "Dark": {
+        "primary": "#1e1e1e",
+        "secondary": "#2d2d2d",
+        "buttons": "#3c3c3c",
+        "text": "#e0e0e0"
+    },
+    "Light": {
+        "primary": "#f5f5f5",
+        "secondary": "#e0e0e0",
+        "buttons": "#ffffff",
+        "text": "#222222"
+    },
+    "Ocean": {
+        "primary": "#0b2545",
+        "secondary": "#13315c",
+        "buttons": "#1f4e79",
+        "text": "#eef4ed"
+    }
+}

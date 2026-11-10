@@ -1,8 +1,8 @@
 """
-Main application window.
+Main application window
 
 Acts as the root UI Container of XenDesk 
-and assemble the main interface components.
+and assemble the main interface components
 """
 
 from PySide6.QtCore import QSize, Qt
@@ -11,7 +11,9 @@ from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QWidget, QPushButton, QS
 from ui.side_bar import SideBar
 import ui.content_view as CV
 
-from core.configManager import config
+from core.config_manager import config
+from core.theme_manager import theme_manager
+from ui.theme_style import build_stylesheet
 
 
 """
@@ -55,24 +57,22 @@ class MainWindow(QMainWindow):
         # Sidebar
 
         self.main_side_bar = SideBar()
+        self.main_side_bar.setObjectName("sidebar")
         self.main_side_bar.setFixedWidth(config.main_sidebar_width)
         
         self.config_button = QPushButton("Config")
         self.config_button.setProperty("role", "system-button")
+        self.config_button.setObjectName("config_button")
         self.config_button.clicked.connect(self.show_view)
         button_size = int(config.main_sidebar_width - .1 * config.main_sidebar_width)
         self.config_button.setFixedSize(button_size, button_size)                 
-        self.config_button.setAutoFillBackground(True)          
+        self.config_button.setAutoFillBackground(True)       
 
         radius = button_size // 2
         margin = (config.main_sidebar_width - button_size) // 2
+        self.config_button.setStyleSheet(f"border-radius: {radius}px;")  # shape only, colors come from the theme
+        
         self.main_side_bar.layout().setContentsMargins(margin, 0, margin, margin)  # type: ignore
-        self.config_button.setStyleSheet(f"""
-            background-color: blue;
-            color: white;
-            border-radius: {radius}px;
-        """)                                                                        # TODO THEME to custom later
-
         self.main_side_bar.layout().addStretch() # type: ignore
         self.main_side_bar.layout().addWidget(self.config_button, alignment = Qt.AlignmentFlag.AlignHCenter) # type: ignore
 
@@ -88,12 +88,24 @@ class MainWindow(QMainWindow):
         ##########
         # Adding it to core window
         ##########
-
+        
         self.core_window = QWidget()
+        self.core_window.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.core_window.setObjectName("root")
         self.core_window.setLayout(self.main_layout)
         self.setCentralWidget(self.core_window)
 
         self.content_stack.layout().addWidget(CV.ConfigView()) # type: ignore
+        self.content_stack.setObjectName("content")
+
+        # Applies the saved theme at startup
+        self.apply_theme(theme_manager.active)
+
+    def apply_theme(self, name):
+        """
+        Applies any theme through one stylesheet
+        """
+        self.setStyleSheet(build_stylesheet(theme_manager.colors(name)))
 
 
     # Was doing too much for that issue, keeping it for later
