@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         
         self.config_button = QPushButton("Config")
         self.config_button.setProperty("role", "system-button")
-        self.config_button.clicked.connect(self.show_view(1))
+        self.config_button.clicked.connect(self.show_view)
         button_size = int(config.main_sidebar_width - .1 * config.main_sidebar_width)
         self.config_button.setFixedSize(button_size, button_size)                 
         self.config_button.setAutoFillBackground(True)          
@@ -93,15 +93,21 @@ class MainWindow(QMainWindow):
         self.core_window.setLayout(self.main_layout)
         self.setCentralWidget(self.core_window)
 
-        # Show welcome view
-        self.show_view(0)
-
+        self.content_stack.layout().addWidget(CV.ConfigView()) # type: ignore
 
 
     # Was doing too much for that issue, keeping it for later
 
+    
+
     def show_view(self,id):
         pass
+
+        # # Show welcome view
+        # self.show_view(0)
+
+
+
 
     # def show_view(self, id):
     #     # If displayed but hidden
