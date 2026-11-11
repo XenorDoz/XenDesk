@@ -28,5 +28,11 @@ def build_stylesheet(colors: dict) -> str:
         #config_button {{ background-color: {buttons}; color: {text}; }}
         QPushButton, QLineEdit, QComboBox {{ background-color: {buttons}; color: {text}; }}
         #delete_button {{ background-color: {DELETE_COLOR}; color: white; }}
+
+        QComboBox QAbstractItemView {{
+            background-color: {buttons};
+            color: {text};
+            selection-background-color: {secondary};
+            selection-color: {text};
         }}
     """
