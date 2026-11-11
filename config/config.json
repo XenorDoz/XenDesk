@@ -1,0 +1,10 @@
+{
+    "main_window_size": {
+        "width": 800,
+        "height": 600
+    },
+    "main_sidebar_width": 80,
+    "next_global_id": 1000,
+    "active_theme": "Dark",
+    "themes": {}
+}
