@@ -14,7 +14,7 @@ class ThemeManager:
         self.config = config
 
     @property
-    def active(self):
+    def get_active(self):
         return self.config.active_theme
 
     def add_custom(self, name, colors):
@@ -30,7 +30,7 @@ class ThemeManager:
         self.config.themes[name] = dict(colors)
         self.config.save()
 
-    def colors(self, name):
+    def get_colors(self, name):
         """
         Returns the colors of any theme, preset or custom
         """
@@ -44,7 +44,7 @@ class ThemeManager:
         self.config.save()
 
     def exists(self, name):
-        return name in self.names()
+        return name in self.get_names()
     
     def is_preset(self, name):
         return name in PRESET_COLORS
@@ -52,7 +52,7 @@ class ThemeManager:
     def is_custom(self, name):
         return name in self.config.themes
 
-    def names(self):
+    def get_names(self):
         return [*PRESET_THEMES, *self.config.themes]
     
     def set_active(self, name):

@@ -146,7 +146,7 @@ class ConfigView(ContentView):
             widget.setText(str(config.get_value(parameter)))
 
     def create_themes_row(self):
-        self.selected_theme = theme_manager.active
+        self.selected_theme = theme_manager.get_active
 
         row = QHBoxLayout()
 
@@ -175,7 +175,7 @@ class ConfigView(ContentView):
         self.theme_combo.blockSignals(True)
         self.theme_combo.clear()
 
-        for name in theme_manager.names():
+        for name in theme_manager.get_names():
             self.theme_combo.addItem(name, name)
         self.theme_combo.addItem(CUSTOMIZE_LABEL, CUSTOMIZE)
 

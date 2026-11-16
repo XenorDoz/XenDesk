@@ -99,13 +99,13 @@ class MainWindow(QMainWindow):
         self.content_stack.setObjectName("content")
 
         # Applies the saved theme at startup
-        self.apply_theme(theme_manager.active)
+        self.apply_theme(theme_manager.get_active)
 
     def apply_theme(self, name):
         """
         Applies any theme through one stylesheet
         """
-        self.setStyleSheet(build_stylesheet(theme_manager.colors(name)))
+        self.setStyleSheet(build_stylesheet(theme_manager.get_colors(name)))
 
 
     # Was doing too much for that issue, keeping it for later

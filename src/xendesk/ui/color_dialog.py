@@ -16,7 +16,7 @@ class ColorDialog(QDialog):
         self.setWindowTitle("Choose colors")
 
         # Starting colors: given colors, or the active theme's colors
-        source = colors or theme_manager.colors(theme_manager.active)
+        source = colors or theme_manager.get_colors(theme_manager.get_active)
         self.colors = {role: QColor(c) for role, c in source.items()}
         self.active_role = "primary"
 
