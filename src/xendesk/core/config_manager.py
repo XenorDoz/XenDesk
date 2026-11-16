@@ -71,8 +71,6 @@ def load_config(path = CONFIG_PATH):
         raw_config = json.load(file)
 
     themes = raw_config.get("themes", {})
-    for colors in themes.values():
-        colors.setdefault("buttons", colors["secondary"])
 
     return Config(
         next_global_id=raw_config["next_global_id"],
