@@ -5,20 +5,17 @@ from core.paths import ASSETS_DIR
 
 PRESETS_PATH = ASSETS_DIR / "themes" / "themes.json"
 
-with open(PRESETS_PATH, "r", encoding="utf-8") as file:
-    PRESET_COLORS = json.load(file)   # name -> {"primary": "#...", ...}, order kept
-
-PRESET_THEMES = tuple(PRESET_COLORS)
-
 
 class ThemeManager:
     """
     Manages themes
     """
+    def __init__(self, config):
+        self.config = config
 
     @property
     def active(self):
-        return config.active_theme
+        return self.config.active_theme
 
     def add_custom(self, name, colors):
         """
@@ -30,8 +27,8 @@ class ThemeManager:
         if self.exists(name):
             raise ValueError(f'Theme "{name}" already exists.')
         
-        config.themes[name] = dict(colors)
-        config.save()
+        self.config.themes[name] = dict(colors)
+        self.config.save()
 
     def colors(self, name):
         """
@@ -40,11 +37,11 @@ class ThemeManager:
 
         if name in PRESET_COLORS:
             return PRESET_COLORS[name]
-        return config.themes[name]
+        return self.config.themes[name]
 
     def delete_custom(self, name):
-        config.themes.pop(name, None)
-        config.save()
+        self.config.themes.pop(name, None)
+        self.config.save()
 
     def exists(self, name):
         return name in self.names()
@@ -53,15 +50,23 @@ class ThemeManager:
         return name in PRESET_COLORS
 
     def is_custom(self, name):
-        return name in config.themes
+        return name in self.config.themes
 
     def names(self):
-        return [*PRESET_THEMES, *config.themes]
+        return [*PRESET_THEMES, *self.config.themes]
     
     def set_active(self, name):
-        config.active_theme = name
-        config.save()
+        self.config.active_theme = name
+        self.config.save()
 
 
+def load_presets(path = PRESETS_PATH):   
+    """
+    Loads presets, only useful for outisde of tests
+    """
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)   # name -> {"primary": "#...", ...}, order kept
 
-theme_manager = ThemeManager()
+PRESET_COLORS = load_presets()
+PRESET_THEMES = tuple(PRESET_COLORS)
+theme_manager = ThemeManager(config)
