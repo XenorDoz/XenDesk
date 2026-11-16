@@ -1,5 +1,6 @@
 import json
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 
 from core.paths import CONFIG_PATH
 
@@ -17,6 +18,7 @@ class Config:
     main_sidebar_width: int
     active_theme: str = "Dark"
     themes: dict = field(default_factory=dict)  # name -> {"primary": "#...", ...}
+    path: Path = CONFIG_PATH       # Where save() writes
 
     def save(self):
         data = {
@@ -26,7 +28,7 @@ class Config:
             "active_theme": self.active_theme,
             "themes": self.themes,
         }
-        with open(CONFIG_PATH, "w", encoding="utf-8") as file:
+        with open(self.path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
 
     def _locate(self, path):
@@ -61,22 +63,23 @@ class Config:
         self.save()
         return True
 
+def load_config(path = CONFIG_PATH):
+    """
+    Loads config, only useful for tests
+    """
+    with open(path, "r", encoding="utf-8") as file:
+        raw_config = json.load(file)
 
-with open(CONFIG_PATH, "r", encoding="utf-8") as file:
-    raw_config = json.load(file)
+    return Config(
+        next_global_id=raw_config["next_global_id"],
+        main_window_size=MainWindowSize(
+            width=raw_config["main_window_size"]["width"],
+            height=raw_config["main_window_size"]["height"],
+        ),
+        main_sidebar_width=raw_config["main_sidebar_width"],
+        active_theme=raw_config.get("active_theme", "Dark"),
+        themes=raw_config.get("themes", {}),
+        path=path,
+    )
 
-themes = raw_config.get("themes", {})
-for colors in themes.values():
-    # Old custom themes get a buttons color, copied from secondary until you change it
-    colors.setdefault("buttons", colors["secondary"])
-
-config = Config(
-    next_global_id=raw_config["next_global_id"],
-    main_window_size=MainWindowSize(
-        width=raw_config["main_window_size"]["width"],
-        height=raw_config["main_window_size"]["height"],
-    ),
-    main_sidebar_width=raw_config["main_sidebar_width"],
-    active_theme=raw_config.get("active_theme", "Dark"),
-    themes=themes,
-)
+config = load_config()
