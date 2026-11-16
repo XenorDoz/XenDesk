@@ -70,8 +70,6 @@ def load_config(path = CONFIG_PATH):
     with open(path, "r", encoding="utf-8") as file:
         raw_config = json.load(file)
 
-    themes = raw_config.get("themes", {})
-
     return Config(
         next_global_id=raw_config["next_global_id"],
         main_window_size=MainWindowSize(
@@ -80,7 +78,7 @@ def load_config(path = CONFIG_PATH):
         ),
         main_sidebar_width=raw_config["main_sidebar_width"],
         active_theme=raw_config.get("active_theme", "Dark"),
-        themes=themes,
+        themes=raw_config.get("themes", {}),
         path=path,
     )
 
